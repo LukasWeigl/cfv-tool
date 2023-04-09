@@ -20,7 +20,7 @@ const FileEncryptor: React.FC<FileEncryptorProps> = ({ file }) => {
 
       const link = document.createElement('a');
       link.href = url;
-      link.download = file.name + '.encrypted';
+      link.download = "Encrypted-"+file.name + '.encrypted';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { decryptFile } from './utils/encryption-utils';
+import React, { useState } from "react";
+import { decryptFile } from "./utils/encryption-utils";
 
 interface FileDecrypterProps {
   encryptedFile: File | any;
 }
 
 const FileDecrypter: React.FC<FileDecrypterProps> = ({ encryptedFile }) => {
-  const [password, setPassword] = useState('');
-
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
@@ -16,19 +16,23 @@ const FileDecrypter: React.FC<FileDecrypterProps> = ({ encryptedFile }) => {
     try {
       const decryptedFile = await decryptFile(encryptedFile, password);
 
-      const decryptedBlob = new Blob([decryptedFile], { type: encryptedFile.type });
+      const decryptedBlob = new Blob([decryptedFile], {
+        type: encryptedFile.type,
+      });
       const url = URL.createObjectURL(decryptedBlob);
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = encryptedFile.name.replace(/\.encrypted$/, '');
-      link.download = "Decrypted-"+encryptedFile.name;
+      link.download = encryptedFile.name.replace(/\.encrypted$/, "");
+      link.download = "Decrypted-" + encryptedFile.name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Decryption failed:', error);
+      console.error("Decryption failed:", error);
+      setErrorMessage("Wrong Password");
+   
     }
   };
 
@@ -36,9 +40,14 @@ const FileDecrypter: React.FC<FileDecrypterProps> = ({ encryptedFile }) => {
     <div>
       <label>
         Password:
-        <input type="password" value={password} onChange={handlePasswordChange} />
+        <input
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
       </label>
       <button onClick={handleDecryptClick}>Decrypt File</button>
+      {errorMessage && <div>{errorMessage}</div>}
     </div>
   );
 };

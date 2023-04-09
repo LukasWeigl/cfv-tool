@@ -1,24 +1,44 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
+import { encryptFile } from './utils/encryption-utils';
 
-interface FileEncrypterProps {
-  file: File | any;
-  password: string;
+interface FileEncryptorProps {
+  file: File | any ;
 }
 
-const FileEncrypter: React.FC<FileEncrypterProps> = ({ file }) => {
+const FileEncryptor: React.FC<FileEncryptorProps> = ({ file }) => {
+  const [password, setPassword] = useState('');
 
-    function handleOnClick() {
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
 
+  const handleEncryptClick = async () => {
+    try {
+      const encryptedFile = await encryptFile(file, password);
+      const encryptedBlob = new Blob([encryptedFile], { type: file.type });
+      const url = URL.createObjectURL(encryptedBlob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.name + '.encrypted';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Encryption failed:', error);
     }
+  };
 
-    return(
-        <>
-            <button onClick={handleOnClick}>
-                Encrypte File
-            </button>
-        </>
-    )
- 
+  return (
+    <div>
+      <label>
+        Password:
+        <input type="password" value={password} onChange={handlePasswordChange} />
+      </label>
+      <button onClick={handleEncryptClick}>Encrypt File</button>
+    </div>
+  );
 };
 
-export default FileEncrypter;
+export default FileEncryptor;

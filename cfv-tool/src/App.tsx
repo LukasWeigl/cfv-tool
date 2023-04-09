@@ -10,19 +10,15 @@ function App() {
   const handleFileSelect = (file: File | null) => {
     setSelectedFile(file);
   }
-  const [password, setPassword] = useState('');
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
   return (
     <div className="App">
      <h1>File Encryption</h1>
      <FilePicker accept=".txt" onFileSelect={handleFileSelect} />
       {selectedFile && <p>Selected file: {selectedFile.name}</p>}
       <h2>Select Password for Encrpytion:</h2>
-      <input type="password" value={password} onChange={handleChange} />
-      <FileEncrypter file={selectedFile} password={password}/>
+
+      <FileEncrypter file={selectedFile}/>
     </div>
   );
 }

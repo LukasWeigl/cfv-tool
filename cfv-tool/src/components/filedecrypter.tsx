@@ -22,6 +22,7 @@ const FileDecrypter: React.FC<FileDecrypterProps> = ({ encryptedFile }) => {
       const link = document.createElement('a');
       link.href = url;
       link.download = encryptedFile.name.replace(/\.encrypted$/, '');
+      link.download = "Decrypted-"+encryptedFile.name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

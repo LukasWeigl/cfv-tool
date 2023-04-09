@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <div>
         <h2>Select File</h2>
-        <FilePicker accept=".txt" onFileSelect={handleFileSelect} />
+        <FilePicker accept=".txt, .encrypted" onFileSelect={handleFileSelect} />
         {selectedFile && <p>Selected file: {selectedFile.name}</p>}
       </div>
       <div className="encryption">

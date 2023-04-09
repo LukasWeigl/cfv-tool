@@ -1,24 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import FilePicker from './components/filepicker';
 
 function App() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileSelect = (file: File | null) => {
+    setSelectedFile(file);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <h1>Hello World</h1>
+     <FilePicker accept=".txt" onFileSelect={handleFileSelect} />
+      {selectedFile && <p>Selected file: {selectedFile.name}</p>}
     </div>
   );
 }
